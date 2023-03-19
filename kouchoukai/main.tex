@@ -1,0 +1,112 @@
+\documentclass[serif,dvipdfmx,10pt]{beamer}
+
+% \usetheme{default}
+% \usetheme{CambridgeUS}
+% \usetheme{Madrid}
+% \usetheme{metropolis}
+\usetheme{Boadilla}
+% \usetheme[numbering=fraction,block=fill,progressbar=frametitle]{metropolis}
+\usepackage{bxdpx-beamer}
+\usepackage{pxjahyper}
+% \usepackage{colourchange}
+\usepackage{minijs}
+\usepackage{float}
+\usepackage{tabu}
+\usepackage{wrapfig}
+\usepackage{amsfonts}
+\usepackage{ascmac}
+\usepackage{mathtools}
+\usepackage{here}
+\usepackage{listings}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{bm}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{xcolor}
+% \usepackage{algorithm2e}
+\usepackage{algpseudocode}
+\usepackage{arydshln}
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,breakable,theorems,skins}
+\usefonttheme{professionalfonts}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{mathpazo}
+
+% Set the title and author
+\title[Coupled Phase-Oscillator Models]{Theoretical and Experimental Research\\on Coupled Phase-Oscillator Models}
+\author{米田亮介}
+
+% Set the date
+\date{2023年2月24日}
+
+% Set the logo and university
+% \logo{\includegraphics[width=1cm]{figs/logo.pdf}}
+\titlegraphic{
+    \includegraphics[width=2cm]{figs/logo.pdf}
+}
+\institute[京大]{京都大学大学院情報学研究科先端数理科学専攻}
+
+% Set the font and color theme
+% \usefonttheme{professionalfonts}
+% \usecolortheme{dolphin}
+
+\setbeamertemplate{navigation symbols}{}
+
+% \AtBeginSection[]{
+%   \frame{\tableofcontents[currentsection, hideallsubsections]} %目次スライド
+% }
+
+\definecolor{forestgreen}{RGB}{34, 139, 34}
+\definecolor{salmon}{RGB}{250, 128, 114}
+\definecolor{deepskyblue}{RGB}{0, 191, 255}
+\definecolor{lightgray}{RGB}{211, 211, 211}
+
+\newcommand{\Kc}{K_{\mathrm{c}}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\lightgray}[1]{\textcolor{lightgray}{#1}}
+\newcommand{\gcheck}{\green{\checkmark}}
+\newcommand{\diff}{\mathrm{d}}
+\newcommand{\redbox}[2]{\tcboxmath[enhanced, frame hidden, colback=red!10, overlay={\node[below,red] at (frame.south) {#2};}]{#1}}
+\newcommand{\greenbox}[2]{\tcboxmath[enhanced, frame hidden, colback=green!10, overlay={\node[below,black] at (frame.south) {#2};}]{#1}}
+
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Introduction}
+\include{intro.tex}
+
+
+\section{Critical exponents in coupled phase-oscillator models on small-world networks}
+\include{chap3.tex}
+
+
+\section{The lower bound of the network connectivity guaranteeing in-phase syn- chronization}
+\include{chap4.tex}
+
+
+\section{Gaussian process regression approach to estimating phase dynamics from rhythmic data}
+\include{chap5.tex}
+
+\section{Conclusion}
+\include{conclusion.tex}
+
+\appendix
+
+\begin{frame}
+    \centerline{\LARGE{APPENDIX}}
+\end{frame}
+
+\include{appendix.tex}
+
+
+\end{document}
