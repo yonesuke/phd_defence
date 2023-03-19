@@ -1,0 +1,104 @@
+The thesis is concluded in this chapter.
+We summarize the results and discuss some future works.
+
+\section{Summary of Our Study}
+In this thesis, we study the coupled phase-oscillator models from theoretical and experimental point of view.
+In Chapter~\ref{chap:paper02}, we calculate the critical exponent $\beta$ of the coupled phase-oscillator models on small world networks using the finite-size scaling analysis.
+We set the coupling functions as $\Gamma(\theta)=\sin\theta+a\sin2\theta$ and the natural frequency distributions as $g_{n}(\omega)=g_{n}(0)-C_{n}\omega^{2n}+\cdots$, and check $(a,n)$-dependence of $\beta$.
+The result suggests that the transition exponent $\beta=1/2$ for $a<0$,
+which differs from the critical exponent result of all-to-all network.
+We also see that for $a=0.5>0$, the transition is discontinuous and the critical exponent is undefeined.
+In Chapter~\ref{chap:paper03}, we consider the Kuramoto model on networks with identical natural frequency, and discuss the relation of network connectivity and in-phase synchronization.
+Several researches have considered dense networks that have equilibrium other than the in-phase synchronization state.
+In this research, we obtain the densest circulant network that have stable ``$p$-twisted states'' by formulating integer programming problems.
+Chapter~\ref{chap:paper06} is devoted to the experimental research on the coupled pahse-oscilator models.
+Estimating the underlying mathematical model from the real data has been the central problem in physics.
+For the rhythmic data it is theoretically known that the model is always reduced to the coupled phase-oscilator model,
+therefore there have been several studies on estimating the phase dynamics,
+including usind the Bayesian linear regression analysis.
+However, this analysis appropriates the coupling function to Fourier expansion series with finite degree, and sometimes the Gibbs phenomena have been encountered.
+We propose a method to estimeate the coupling function by the Gaussian process regression.
+The regression can be regarded as the optimization in the infinite dimensional periodic function space, therefore we have a theoretical guarantee that the optimized function is smooth.
+We have checked the validity by applying this method to the Van der Pol oscilators and spiking neurons.
+
+
+
+\section{Future works}
+We give two future works to end this thesis.
+
+In Chapter~\ref{chap:paper03}, we considered the dense network that do not synchronize.
+After the paper~\cite{yoneda2021} was published, the lower bound of $\mu_{\mathrm{c}}$ was improved from $0.6838\dots$ to $11/16=0.6875$ by Canale~\cite{canale2022}.
+Also, the upper bound was improved to $3/4=0.75$ by Kassabov \textit{et al.}~\cite{kassabov2021}.
+These results are summarized in Table~\ref{table:list-mu}.
+Further research is needed to find the exact value of $\mu_{\mathrm{c}}$.
+Especially for the lower bound, other ``solvable networks'' with ``solvable stable states'' are needed to be considered.
+We will tackle this problem in the future.
+\begin{table}[htb]
+  \caption{List of recent research on network connectivity $\mu$ and its tendency to synchronization.}
+  \label{table:list-mu}
+  \centering
+  \begin{tabular}{ll}
+    network that do not synchronize & network that always synchronize \\\hline
+    $\mu\leq0.6809\dots$ (Wiley, 2006~\cite{wiley2006}) & $\mu=1$ (Watanabe, 1994~\cite{watanabe1994}) \\
+    $\mu\leq0.6818\dots$ (Canale, 2015~\cite{canale2015}) & $\mu\geq0.9395\dots$ (Taylor, 2012~\cite{taylor2012})\\
+    $\mu\leq0.6828\dots$ (Townsend, 2020~\cite{townsend2020}) & $\mu\geq0.7929\dots$ (Ling, 2019~\cite{ling2019}) \\
+    $\mu\leq0.6838\dots$ (Yoneda, 2021~\cite{yoneda2021}) & $\mu\geq0.7889\dots$ (Lu, 2020~\cite{lu2020}) \\
+    $\mu\leq0.6875$ (Canale, 2022~\cite{canale2022}) & $\mu\geq0.75$ (Kassabov, 2021~\cite{kassabov2021})
+  \end{tabular}
+\end{table}
+
+For a future work regarding Chapter~\ref{chap:paper06},
+In Chapter~\ref{chap:paper06}, we have shown that the coupling function can be estimated by the Gaussian process regression.
+We have approximated the phase differentiation $\frac{\diff\theta_{i}}{\diff t}$ by a finite difference,
+but this approximation is one of the sources of error.
+In order to reduce the error, the time step width must be reduced, but this requires an increase in the number of data, a situation that is not very favorable for Gaussian process regression.
+In the recent machine learning boom, a method called ``neural ode/sde'' was proposed to efficiently compute the gradient of a parameterized differential equation~\cite{chen2018,li2020}.
+We briefly introduce the algorithm here. We consider the stochastic differential equation of the following form:
+\begin{align}
+  \diff x=f(t,x;\theta)\diff t+g(t,x;\theta)\diff W_{t},
+\end{align}
+where $f$ is the drift function, $g$ is the diffusion function, and $W_{t}$ is the Wiener process. $\theta$ is the parameter of the drift and diffusion functions.
+The paper \cite{li2020} shows that the gradient of the loss function $\mathcal{L}$ with respect to the initial value $x(t_{0})$ and parameters $\theta$ can be calculated by the adjoint equation of the stochastic differential equation, where the adjoint state is defined as $a(t)=\partial\mathcal{L}/\partial x(t)$.
+The algorithm of this calculation is shown in Algorithm~\ref{alg:neural-sde}.
+Preliminary numerical calculations have shown that the adjoint method is effective for estimating dynamical systems.
+We would like to use this method to estimate coupled phase-oscillator models from rhythmic data in the future.
+
+\begin{figure}[htb]
+  \begin{algorithm}[H]
+    \caption{Algorithm for calculating the gradient of the loss function $\mathcal{L}$ with respect to initial value $x(t_{0})$ and parameters $\theta$ using \texttt{sdeint} function~\cite{li2020}.
+    Here \texttt{sdeint} is a function that takes $(x(t_{0}),f,g,w,t_{0},t_{1})$ as an input and calculate the SDE $\diff x=f\diff t+g\diff W_{t}$ with the Wiener process $w(t)$ and the initial value $x(t_{0})$ from time $t_{0}$ to time $t_{1}$ and return the final value $x(t_{1})$.}
+    \label{alg:neural-sde}
+    \begin{algorithmic}
+    \Input Parameters $\theta$, start time $t_{0}$, stop time $t_{1}$, final
+    state $x(t_{1})$, loss gradient $\partial \mathcal{L}/\partial x(t_{1})$, drift $f(t,x;\theta)$, diffusion $g(t,x;\theta)$, Wiener process sample $w(t)$.
+    \Output $\partial \mathcal{L}/\partial x(t_{0}), \partial \mathcal{L}/\partial\theta$
+
+    \Function{$\overline{f}$}{$t,[a(t),x(t),\cdot];\theta$} \Comment Augmented drift
+    \State $v=f(-t,x(t);\theta)$
+    \State \Return $[a(t)\partial v/\partial x, -v, a(t)\partial v/\partial\theta]$
+    \EndFunction
+
+    \Function{$\overline{g}$}{$t,[a(t),x(t),\cdot];\theta$} \Comment Augmented diffusion
+    \State $v=g(-t,x(t);\theta)$
+    \State \Return $[a(t)\partial v/\partial x, -v, a(t)\partial v/\partial\theta]$
+    \EndFunction
+
+    \Function{$\overline{w}$}{t} \Comment Replicated noise
+    \State \Return $[-w(-t), -w(-t), -w(-t)]$
+    \EndFunction
+
+    \State Calculate
+    \begin{align*}
+      \begin{bmatrix}
+        \partial \mathcal{L}/\partial x(t_{0}) \\ x(t_{0})\\ \partial L/\partial \theta
+      \end{bmatrix}
+      =\texttt{sdeint}\left(
+        \begin{bmatrix}
+          \partial \mathcal{L}/\partial x(t_{1}) \\ x(t_{1})\\ \bm{0}_{\#\theta}
+        \end{bmatrix},
+        \overline{f},\overline{g},\overline{w},-t_{1},-t_{0}
+      \right)
+    \end{align*}
+    \end{algorithmic}
+  \end{algorithm}
+\end{figure}

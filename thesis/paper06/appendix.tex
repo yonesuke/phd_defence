@@ -1,0 +1,76 @@
+\section{Nueron models}
+\label{sec:neuron-model}
+
+The Hodgkin--Huxley model reads the following:
+\begin{align}
+    &C\dot{V}=G_{\mathrm{Na}}m^{3}h(E_{\mathrm{Na}}-V)+G_{\mathrm{K}}n^{4}(E_{K}-V)+G_{\mathrm{L}}(E_{\mathrm{L}}-V)+I_{\mathrm{input}}+\xi_{V},\\
+    &\dot{m}=\alpha_{m}(V)(1-m)-\beta_{m}(V)m+\xi_{m},\\
+    &\dot{h}=\alpha_{h}(V)(1-h)-\beta_{h}(V)m+\xi_{h},\\
+    &\dot{n}=\alpha_{n}(V)(1-n)-\beta_{n}(V)n+\xi_{n},
+\end{align}
+with the parameter values $C=1,G_{\mathrm{Na}}=120,G_{\mathrm{K}}=36,G_{\mathrm{L}}=0.3,E_{\mathrm{Na}}=50,E_{\mathrm{K}}=-77,E_{\mathrm{L}}=-54.4$.
+The auxiliary functions $\alpha_{m,h,n},\beta_{m,h,n}$ are
+\begin{align}
+    &\alpha_{m}(V)=\frac{0.1(V+40)}{1-\exp[(-V-40)/10]},\quad\beta_{m}(V)=4\exp\frac{-V-65}{18},\\
+    &\alpha_{h}(V)=0.07\exp\frac{-V-65}{20},\quad\beta_{h}(V)=\frac{1}{1+\exp[(-V-35)/10]},\\
+    &\alpha_{n}(V)=\frac{0.01(V+55)}{1-\exp[(-V-55)/10]},\quad\beta_{n}(V)=0.125\exp\frac{-V-65}{80}.
+\end{align}
+
+The model of fast-spiking neurons reads the following:
+\begin{align}
+    &C\dot{V}=G_{\mathrm{Na}}m^{3}h(E_{\mathrm{Na}}-V)+G_{\mathrm{K}}n^{2}(E_{K}-V)+G_{\mathrm{L}}(E_{\mathrm{L}}-V)+I_{\mathrm{input}}+\xi_{V},\\
+    &\dot{m}=\alpha_{m}(V)(1-m)-\beta_{m}(V)m+\xi_{m},\\
+    &\dot{h}=\alpha_{h}(V)(1-h)-\beta_{h}(V)m+\xi_{h},\\
+    &\dot{n}=\alpha_{n}(V)(1-n)-\beta_{n}(V)n+\xi_{n},
+\end{align}
+with the parameter values $C=1,G_{\mathrm{Na}}=112,G_{\mathrm{K}}=224,G_{\mathrm{L}}=0.1,E_{\mathrm{Na}}=55,E_{\mathrm{K}}=-97,E_{\mathrm{L}}=-70.0$.
+The auxiliary functions $\alpha_{m,h,n},\beta_{m,h,n}$ are
+\begin{align}
+    &\alpha_{m}(V)=\frac{40(V-75)}{1-\exp[(75-V)/13.5]},\quad\beta_{m}(V)=1.2262\exp\frac{-V}{42.248},\\
+    &\alpha_{h}(V)=0.0035\exp\frac{-V}{24.186},\quad\beta_{h}(V)=\frac{0.017(-51.25-V)}{\exp[(-51.25-V)/5.2]-1},\\
+    &\alpha_{n}(V)=\frac{V-95}{1-\exp[(95-V)/11.8]},\quad\beta_{n}(V)=0.025\exp\frac{-V}{22.222}.
+\end{align}
+
+The input current for each cell, denoted by $i$, is the combination of the bias current and the current flowing through the synapses. It can be expressed mathematically as: $I_{\mathrm{input},i} = I_{\mathrm{bias},i} + \sum_{j \in \mathrm{pre}_{i}} I_{\mathrm{syn},ij}$. The symbol "pre" represents the set of cells that have a synaptic connection with cell $i$. In this case, the bias current for cell $1$ is 30, for cell $2$ is 32 and so on, with the values being $30,32,6,6.5,34,36,38$ respectively for cells $1$ through $7$.
+
+The current flowing through the synapses, $I_{\mathrm{syn},ij}$, is modeled using the kinetic synapse model~\cite{Destexhe1994}, where it is represented as
+\begin{align}
+    I_{\mathrm{syn},ij} = G_{ij}r_{ij}(t)[V_i(t) - E_{ij}].
+\end{align}
+The fraction of bound receptor proteins is represented by $r_{ij}$, and its dynamics are described by the following equation:
+\begin{align}
+    \frac{dr_{ij}}{dt} = \alpha_{ij}T_{ij}(1 - r_{ij}) - \beta_{ij}r_{ij},
+\end{align}
+where $T_{ij}$ is the concentration of neurotransmitters, which is set to 1 when a spike is emitted by the presynaptic cell and resets to 0 after 1 millisecond. The constants $\alpha_{ij}$ and $\beta_{ij}$ govern the kinetics of $r_{ij}$, while $E_{ij}$ is the reversal potential and $G_{ij}$ is the synaptic conductance. The values used for excitatory and inhibitory synapses are $(\alpha_{ij},\beta_{ij},E_{ij},G_{ij}) = (1.1, 0.67, 0, 0.5)$ and $(9.8, 0.2, -75, 0.4)$ respectively. Additionally, a weak, independent noise function $\xi_{x,i}$ is added to the membrane voltage $V_i$ and channel variables $m_i$, $h_i$ and $n_i$. The noise follows a Gaussian white noise distribution, with $\langle \xi_{x,i}(t) \rangle = 0$ and $\langle \xi_{x,i}(t)\xi_{y,j}(s) \rangle = \sigma_x^2 \delta_{xy}\delta_{ij}\delta(t - s)$, where x,y = $V$, $m$, $h$, $n$, and i and j are the cell indices. The noise strengths used are $\sigma_V = 0.5$ and $\sigma_m = \sigma_h = \sigma_n = 5 \times 10^{-6}$.
+
+\section{Sparse Gaussian process}
+\label{sec:sparse-gp}
+Here, we show the algorithm of the sparse Gaussian process (SGP) regression in Algorithm~\ref{alg:gp_sparse_regression}.
+
+\begin{figure}[!t]
+    \begin{algorithm}[H]
+      \caption{Sparse Gaussian process regression \texttt{GP\_SPARSE\_REGRESSION}}
+      \label{alg:gp_sparse_regression}
+      \begin{algorithmic}
+      \Input training data $X,\bm{y}$ \Comment{$X\texttt{[i]}=\bm{x}_{i},\bm{y}\texttt{[i]}=y_{i}$}
+      \Input test input data $\bm{x}^{\ast}$
+      \Input prior Gaussian process $\mathcal{GP}(0,k)$ \Comment{covariance function $k(\cdot,\cdot)$}
+      \Input variance of noise $\sigma^{2}$
+      \Input inducing points $Z$ \Comment{$Z\texttt{[i]}=\bm{z}_{i}$}
+      \Output Gaussian distributions of values at $\bm{x}^{\ast}$
+      \Function{\texttt{GP\_SPARSE\_REGRESSION}}{$X,\bm{y},\bm{x}^{\ast},\mathcal{GP}(0,k),\sigma^{2},Z$}
+      \State calculate matrix $\bm{K}_{XX}\gets(\bm{K}_{XX})_{i,j}=(k(\bm{x}_{i},\bm{x}_{j}))_{i,j}$
+      \State calculate matrix $\bm{K}_{XZ}\gets(\bm{K}_{XZ})_{i,j}=(k(\bm{x}_{i},\bm{z}_{j}))_{i,j}$
+      \State calculate matrix $\bm{K}_{ZZ}\gets(\bm{K}_{ZZ})_{i,j}=(k(\bm{z}_{i},\bm{z}_{j}))_{i,j}$
+      \State calculate array $\bm{k}_{Z\bm{x}^{\ast}}\gets(\bm{K}_{Z\bm{x}^{\ast}})_{i}=(k(\bm{z}_{i},\bm{x}^{\ast}))_{i}$
+      \State calculate value $k_{\bm{x}^{\ast}\bm{x}^{\ast}}\gets k(\bm{x}^{\ast},\bm{x}^{\ast})$
+      \State calculate matrix $\bm{\Lambda}\gets\texttt{diag}(\bm{K}_{XX}-\bm{K}_{XZ}\bm{K}_{ZZ}^{-1}\bm{K}_{XZ}^{\top})$ \Comment{$\bm{\Lambda}$ is a diagonal matrix}
+      \State calculate matrix $\bm{Q}_{ZZ}\gets\bm{K}_{ZZ}+\bm{K}_{XZ}^{\top}(\bm{\Lambda}+\sigma^{2}\bm{I})^{-1}\bm{K}_{XZ}$
+      \State calculate array $\hat{\bm{u}}\gets\bm{K}_{ZZ}\bm{Q}_{ZZ}^{-1}\bm{K}_{XZ}^{\top}(\bm{\Lambda}+\sigma^{2}\bm{I})^{-1}\bm{y}$
+      \State calculate mean $m_{\textrm{sparse}}\gets\bm{k}_{Z\bm{x}^{\ast}}^{\top}\bm{K}_{ZZ}^{-1}\hat{\bm{u}}$
+      \State calculate variance $v_{\textrm{sparse}}\gets k_{\bm{x}^{\ast}\bm{x}^{\ast}}-\bm{k}_{Z\bm{x}^{\ast}}^{\top}(\bm{K}_{ZZ}^{-1}-\bm{Q}_{ZZ}^{-1})\bm{k}_{Z\bm{x}^{\ast}}+\sigma^{2}$
+      \State \Return $\mathcal{N}(m_{\textrm{sparse}},v_{\textrm{sparse}})$
+      \EndFunction
+      \end{algorithmic}
+    \end{algorithm}
+  \end{figure}

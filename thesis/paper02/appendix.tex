@@ -1,0 +1,62 @@
+\section{Bayesian Scaling Analysis}
+\label{sec:bsa}
+We briefly review the Bayesian scaling analysis~\cite{harada2011,harada2015},
+ a statistical method for estimating the values such as $\beta, \bar{\nu},$ and $K_{\rm c}$ in Eq.~\eqref{eq:finite-size}.
+We write these values as $\theta_{p}=(\beta,\bar{\nu},K_{\mathrm{c}})$.
+We assume that the scaling function $F$ in Eq.~\eqref{eq:finite-size} obeys a Gaussian process
+\begin{align}
+    F\sim\mathcal{GP}(m,k_{\theta_{h}}),
+\end{align}
+with mean function $m(\cdot)$ and covariance kernel $k_{\theta_{h}}(\cdot,\cdot)$.
+Here $\theta_{h}$ denotes the hyperparameters of covariance kernel.
+We also set $m=0$ for simplicity.
+In the following, we also use the notation $\bm{\theta}=(\theta_{h},\theta_{p})$.
+For the data $\{r_{N_{i}}(K_{i})\}_{i=1}^{M}$,
+the rescaled data $X_{\theta_{p},i}=(K_{i}-K_{\mathrm{c}})N_{i}^{1/\bar{\nu}}$
+and $Y_{\theta_{p},i}=r_{N_{i}}(K_{i})N_{i}^{\beta/\bar{\nu}}$
+must collapse on the scaling function as $Y_{\theta_{p},i}=F(X_{\theta_{p},i})$.
+Since $F$ is a Gaussian process, $Y_{\theta_{p}}$ obeys a $M$-dimensional
+Gaussian distribution, and the probability of $Y$ for the parameter $\bm{\theta}$ is
+\begin{align}
+    &p(Y\mid\bm{\theta})=\mathcal{N}(Y_{\theta_{p}}\mid\bm{0},K_{\bm{\theta}})\notag\\
+    =&\frac{1}{(2\pi)^{N/2}[\det K_{\bm{\theta}}]^{1/2}}
+    \exp\left[-\frac{1}{2}Y_{\theta_{p}}^{\mathsf{T}}K_{\bm{\theta}}^{-1}Y_{\theta_{p}}\right].
+    \label{eq:posterior}
+\end{align}
+Here, $[K_{\bm{\theta}}]=k_{\theta_{h}}(X_{\theta_{p},i},X_{\theta_{p},j})$ is $M\times M$ dimensional matrix.
+By assuming that the prior distribution of $\bm{\theta}$ is uniform, we have
+\begin{align}
+    p(\bm{\theta}\mid Y)\propto p(Y\mid\bm{\theta}),
+\end{align}
+from Bayes' theorem.
+The most probable parameters $\bm{\theta}$ are, therefore,  estimated by finding the minimum of likelihood function given by
+\begin{align}
+  L_{\bm{\theta}}
+%  = \log|K_{\bm{\theta}}|
+  = \log(\det K_{\bm{\theta}})
+  + Y_{\theta_{p}}^{\mathsf{T}}K_{\bm{\theta}}^{-1}Y_{\theta_{p}},
+    \label{eq:likelihood}
+\end{align}
+which is obtained by taking $\log$ and discarding constants in Eq.~\eqref{eq:posterior}.
+The gradient of $L_{\bm{\theta}}$ for an element $\theta\in\bm{\theta}$ is given by
+\begin{equation}
+\begin{split}
+    \frac{\partial L_{\bm{\theta}}}{\partial \theta}
+    =&\mathrm{tr}\left[K_{\bm{\theta}}^{-1}\frac{\partial K_{\bm{\theta}}}{\partial\theta}\right]-(K_{\bm{\theta}}^{-1}Y_{\theta_{p}})^{\mathsf{T}}\frac{\partial K_{\bm{\theta}}}{\partial \theta}(K_{\bm{\theta}}^{-1}Y_{\theta_{p}})\\
+    &+2Y_{\theta_{p}}^{\mathsf{T}}K_{\bm{\theta}}^{-1}\frac{\partial Y_{\theta_{p}}}{\partial\theta},
+\end{split}
+\end{equation}
+and using this gradient, the gradient method gives us the most probable parameters $\bm{\theta}$.
+
+In this paper, we consider a kernel based on a radial basis function (RBF) kernel
+\begin{align}
+    k_{\theta_{h}}(x,y)=\theta_{1}\exp\left[-\frac{(x-y)^{2}}{\theta_{2}}\right]+\theta_{3}\delta(x,y),
+\end{align}
+which is parameterized by $\theta_{h}=(\theta_1,\theta_2,\theta_3)$ with $\theta_{1,2,3}>0$,
+and $\delta(x,y)=1$ when $x=y$, otherwise $\delta(x,y)=0$.
+Here, $\theta_{3}$ denotes the data fidelity.
+Roughly speaking, a sample path of Gaussian process associated with a RBF kernel are known to be an infinitely differentiable function;
+see \cite[Corollary~4.13]{kanagawa2018} for a rigorous statement.
+Therefore, the Bayesian scaling analysis only assumes the smoothness of a scaling function,
+and it does not need an explicit form.
+See the reference \cite{harada2011,harada2015} for more detailed discussions.

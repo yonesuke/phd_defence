@@ -1,0 +1,156 @@
+% \documentclass[dvipdfmx,12pt]{report}
+\documentclass[dvipdfmx,12pt,twoside,openright]{book}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+% \usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+% \usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
+
+% Useful packages
+\usepackage{mathpazo}
+\usepackage[Conny]{fncychap} %Options: Sonny, Lenny, Glenn, Conny, Rejne, Bjarne, Bjornstrup
+\usepackage{comment}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{setspace}
+\usepackage{appendix}
+\usepackage[chapter]{algorithm}
+\usepackage{algpseudocode}
+% \usepackage{algorithm2e}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+% \fancyhead[RE]{\rightmark}
+% \fancyhead[LO]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancyhead[LE]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+\cfoot{}
+
+% bib
+% \usepackage[style=phys,articletitle=true,biblabel=brackets,chaptertitle=false,pageranges=false,doi=false]{biblatex}
+\usepackage[style=alphabetic,refsegment=chapter,maxbibnames=99]{biblatex}
+\addbibresource{main.bib}
+% \usepackage[sort&compress,numbers,sectionbib]{natbib}
+% \usepackage{chapterbib}
+
+% macro
+\newcommand{\ave}[1]{\langle #1 \rangle}
+\newcommand{\aveave}[1]{\langle\hspace*{-0.2em}\langle #1 \rangle\hspace*{-0.2em}\rangle}
+\newcommand{\diff}{\mathrm{d}}
+\newcommand{\argmin}{\mathop{\rm arg~min}\limits}
+\newcommand{\etal}{\textit{et al}. }
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% theorem
+\newtheorem{define}{Definition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lem}{Lemma}[chapter]
+\newtheorem{eg}{Example}[chapter]
+\newtheorem{problem}{Problem}[chapter]
+
+% algorithm
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+
+\begin{document}
+
+\input{title/title1}
+
+\frontmatter
+
+% \chapter*{Abstract}
+% \addcontentsline{toc}{chapter}{Abstract}
+% Your abstract.
+
+\tableofcontents
+\listoffigures
+\listoftables
+\listofalgorithms
+
+\mainmatter
+
+\chapter{Introduction}
+\input{intro/main}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+
+\chapter{Review of coupled phase-oscillator model}
+\label{chap:rev_cpo}
+\input{cpo/main}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+% \bibliographystyle{plain}
+% \bibliography{sample}
+
+% \chapter{Classification of bifurcation diagrams in coupled phase-oscillator models with asymmetric natural frequency distributions}
+% \input{paper01/main}
+
+\chapter{Critical exponents in coupled phase-oscillator models on small-world networks}
+\label{chap:paper02}
+\input{paper02/main}
+\begin{subappendices}
+  \input{paper02/appendix}
+\end{subappendices}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+% \bibliographystyle{plain}
+% \bibliography{sample}
+
+\chapter{The lower bound of the network connectivity guaranteeing in-phase synchronization}
+\label{chap:paper03}
+\input{paper03/main}
+\begin{subappendices}
+  \input{paper03/appendix}
+\end{subappendices}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+% \bibliographystyle{plain}
+% \bibliography{sample}
+
+\chapter{Gaussian process regression approach to estimating phase dynamics from rhythmic data}
+\label{chap:paper06}
+\input{paper06/main}
+\begin{subappendices}
+  \input{paper06/appendix}
+\end{subappendices}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+% \bibliographystyle{plain}
+% \bibliography{sample}
+% hello from ipad
+
+\chapter{Conclusion}
+\label{chap:conclusion}
+\input{conclusion/main}
+\printbibliography[segment=\therefsegment,heading=subbibliography]
+% \bibliographystyle{plain}
+% \bibliography{sample}
+
+\newpage
+
+\appendix
+
+% \chapter{Review of Gaussian process}
+% \label{chap:gp}
+% \input{gp/main}
+% \printbibliography[segment=\therefsegment,heading=subbibliography]
+
+\chapter*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+\input{acknowledgement/main}
+
+% \addcontentsline{toc}{chapter}{Bibliography}
+% \printbibliography
+
+% \bibliographystyle{plain}
+% \bibliography{sample}
+
+\end{document}
